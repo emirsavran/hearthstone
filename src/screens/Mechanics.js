@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 import api from '../api';
 
-const Home = () => {
+const Mechanics = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [cardsByMech, setCardsByMech] = useState({});
 
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Mechanics;
