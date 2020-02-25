@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 import api from '../api';
 
-const Mechanics = () => {
+const Mechanics = ({navigation}) => {
   const [isFetching, setIsFetching] = useState(false);
   const [cardsByMech, setCardsByMech] = useState({});
 
@@ -34,22 +34,27 @@ const Mechanics = () => {
     fetchAndFilterCards();
   }, []);
 
+  const handleMechPress = name => {
+    navigation.navigate('Cards', {
+      name,
+      cards: cardsByMech[name],
+    });
+  };
+
   if (isFetching) {
     return <Text>Fetching....</Text>;
   }
 
-  const flatListData = Object.keys(cardsByMech).map((mech, i) => ({
-    name: mech,
-    key: i.toString(),
-  }));
-
   return (
     <FlatList
-      data={flatListData}
+      data={Object.keys(cardsByMech)}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
+      keyExtractor={item => item}
       renderItem={({item}) => (
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.itemText}>{item.name}</Text>
+        <TouchableOpacity
+          onPress={() => handleMechPress(item)}
+          style={styles.button}>
+          <Text style={styles.itemText}>{item}</Text>
           <Text style={styles.gt}>&#62;&#62;</Text>
         </TouchableOpacity>
       )}
