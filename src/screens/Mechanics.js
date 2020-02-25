@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import api from '../api';
 
 const Mechanics = ({navigation}) => {
@@ -42,7 +49,11 @@ const Mechanics = ({navigation}) => {
   };
 
   if (isFetching) {
-    return <Text>Fetching....</Text>;
+    return (
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   return (
@@ -63,6 +74,10 @@ const Mechanics = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   separator: {
     height: 1,
     backgroundColor: '#aaaaaa',
