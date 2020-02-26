@@ -87,8 +87,11 @@ const renderItem = ({item}) => {
         ]}>
         <TouchableWithoutFeedback onPress={flipCard}>
           <View style={styles.flipCardBackContainer}>
-            <Text>Name: {item.name}</Text>
+            <Text>Card Set: {item.cardSet}</Text>
             <Text>Player Class: {item.playerClass}</Text>
+            <Text>Type: {item.type}</Text>
+            {item.rarity && <Text>Rarity: {item.rarity}</Text>}
+            {item.race && <Text>Race: {item.race}</Text>}
           </View>
         </TouchableWithoutFeedback>
       </Animated.View>
