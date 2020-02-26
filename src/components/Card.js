@@ -8,12 +8,28 @@ import {
   View,
 } from 'react-native';
 
+import placeholder from '../assets/placeholder.png';
+
 class Card extends Component {
   constructor(props) {
     super(props);
+    // set image source if it exists
+    // if not, set it to placeholder
+    let imgSrc;
+    if (props.item.img) {
+      imgSrc = {uri: props.item.img};
+    } else {
+      imgSrc = placeholder;
+    }
+    this.state = {
+      imgSrc,
+    };
+
     this.animatedValue = new Animated.Value(0);
     this.value = 0;
+
     this.flipCard = this.flipCard.bind(this);
+
     this.frontInterpolate = this.animatedValue.interpolate({
       inputRange: [0, 180],
       outputRange: ['0deg', '180deg'],
@@ -59,6 +75,7 @@ class Card extends Component {
     };
 
     const {item} = this.props;
+    const {imgSrc} = this.state;
 
     return (
       <>
@@ -71,9 +88,9 @@ class Card extends Component {
           <TouchableWithoutFeedback onPress={this.flipCard}>
             <Image
               resizeMode="contain"
-              defaultSource={require('../assets/placeholder.png')}
-              source={{uri: item.img}}
-              onError={() => console.log('load error')}
+              source={imgSrc}
+              loadingIndicatorSource={placeholder}
+              onError={() => this.setState({imgSrc: placeholder})}
               style={styles.cardImage}
             />
           </TouchableWithoutFeedback>
@@ -104,6 +121,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: '100%',
     aspectRatio: 0.66,
+    alignSelf: 'center',
   },
   flipCard: {
     width: '100%',
