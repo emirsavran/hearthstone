@@ -1,32 +1,38 @@
 import React, {useState, useCallback} from 'react';
-import {TextInput, StyleSheet, Dimensions} from 'react-native';
+import {Text, TextInput, StyleSheet, Dimensions} from 'react-native';
 import debounce from 'lodash.debounce';
 
 import {CardList, Spinner} from '../components';
 
 import api from '../api';
 
-const searchCards = async (searchTerm, setIsFetching) => {
+const searchCards = async (searchTerm, setIsFetching, setError, setCards) => {
   setIsFetching(true);
-  const res = await api.searchCards(searchTerm);
-  const results = await res.json();
+  setError(null);
+  const result = await api.searchCards(searchTerm);
   setIsFetching(false);
-  return results;
+
+  if (result.error) {
+    return setError(result.error);
+  }
+
+  setCards(result.json);
+  console.log(result);
 };
 
 const Search = ({navigation}) => {
   const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState(null);
   const [cards, setCards] = useState([]);
   const [value, setValue] = useState('');
   const debouncedApiCall = useCallback(debounce(searchCards, 1000), []);
 
-  const onChangeText = async searchTerm => {
+  const onChangeText = searchTerm => {
     setValue(searchTerm);
     if (!searchTerm) {
       return;
     }
-    const result = await debouncedApiCall(searchTerm, setIsFetching);
-    setCards(result);
+    debouncedApiCall(searchTerm, setIsFetching, setError, setCards);
   };
 
   navigation.setOptions({
@@ -45,6 +51,10 @@ const Search = ({navigation}) => {
 
   if (isFetching) {
     return <Spinner />;
+  }
+
+  if (!isFetching && error) {
+    return <Text>{error}</Text>;
   }
 
   return <CardList cards={cards} />;

@@ -7,12 +7,19 @@ import api from '../api';
 
 const Mechanics = ({navigation}) => {
   const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState(null);
   const [cardsByMech, setCardsByMech] = useState({});
 
   const fetchAndFilterCards = async () => {
     setIsFetching(true);
-    const res = await api.findCards();
-    const cards = await res.json();
+    const result = await api.findCards();
+    setIsFetching(false);
+
+    if (result.error) {
+      return setError(result.error);
+    }
+
+    const cards = result.json;
     console.log(cards);
     const mechanics = {};
     Object.keys(cards).forEach(set => {
@@ -30,7 +37,6 @@ const Mechanics = ({navigation}) => {
     });
     setCardsByMech(mechanics);
     console.log(mechanics);
-    setIsFetching(false);
   };
 
   useEffect(() => {
@@ -46,6 +52,10 @@ const Mechanics = ({navigation}) => {
 
   if (isFetching) {
     return <Spinner />;
+  }
+
+  if (!isFetching && error) {
+    return <Text>{error}</Text>;
   }
 
   return (
