@@ -1,16 +1,22 @@
 import React, {useState, useCallback} from 'react';
-import {Text, TextInput, StyleSheet, Dimensions} from 'react-native';
+import {TextInput, StyleSheet, Dimensions} from 'react-native';
 import debounce from 'lodash.debounce';
 
 import api from '../api';
+import Spinner from '../components/Spinner';
+import CardList from '../components/CardList';
 
-const searchCards = async searchTerm => {
+const searchCards = async (searchTerm, setIsFetching) => {
+  setIsFetching(true);
   const res = await api.searchCards(searchTerm);
   const results = await res.json();
+  setIsFetching(false);
   return results;
 };
 
 const Search = ({navigation}) => {
+  const [isFetching, setIsFetching] = useState(false);
+  const [cards, setCards] = useState([]);
   const [value, setValue] = useState('');
   const debouncedApiCall = useCallback(debounce(searchCards, 1000), []);
 
@@ -19,8 +25,8 @@ const Search = ({navigation}) => {
     if (!searchTerm) {
       return;
     }
-    const returned = await debouncedApiCall(searchTerm);
-    console.log('returned ', returned);
+    const result = await debouncedApiCall(searchTerm, setIsFetching);
+    setCards(result);
   };
 
   navigation.setOptions({
@@ -37,7 +43,11 @@ const Search = ({navigation}) => {
     ),
   });
 
-  return <Text>Search Screen</Text>;
+  if (isFetching) {
+    return <Spinner />;
+  }
+
+  return <CardList cards={cards} />;
 };
 
 const styles = StyleSheet.create({
