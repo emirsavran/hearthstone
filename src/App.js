@@ -4,20 +4,40 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Mechanics from './screens/Mechanics';
 import Cards from './screens/Cards';
+import Search from './screens/Search';
 
-const {Navigator, Screen} = createStackNavigator();
+import SearchButton from './components/SearchButton';
+
+const RootStack = createStackNavigator();
+const MainStack = createStackNavigator();
+
+function MainStackScreen() {
+  return (
+    <MainStack.Navigator
+      screenOptions={({navigation}) => ({
+        headerRight: () => <SearchButton navigation={navigation} />,
+      })}>
+      <MainStack.Screen name="Mechanics" component={Mechanics} />
+      <MainStack.Screen
+        name="Cards"
+        component={Cards}
+        options={({route}) => ({title: route.params.name})}
+      />
+    </MainStack.Navigator>
+  );
+}
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Navigator>
-        <Screen name="Mechanics" component={Mechanics} />
-        <Screen
-          name="Cards"
-          component={Cards}
-          options={({route}) => ({title: route.params.name})}
+      <RootStack.Navigator mode="modal">
+        <RootStack.Screen
+          name="Main"
+          component={MainStackScreen}
+          options={{headerShown: false}}
         />
-      </Navigator>
+        <RootStack.Screen name="Search" component={Search} />
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 };
