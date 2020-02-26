@@ -17,6 +17,10 @@ class API {
   findCards() {
     return this.fetch('cards');
   }
+
+  searchCards(name) {
+    return this.fetch(`cards/search/${name}`);
+  }
 }
 
 export default new API(rapidapiHost, rapidapiKey);
