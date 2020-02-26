@@ -2,11 +2,9 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Mechanics from './screens/Mechanics';
-import Cards from './screens/Cards';
-import Search from './screens/Search';
+import {Mechanics, Cards, Search} from './screens';
 
-import SearchButton from './components/SearchButton';
+import {SearchButton} from './components';
 
 const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();

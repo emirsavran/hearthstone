@@ -2,9 +2,9 @@ import React, {useState, useCallback} from 'react';
 import {TextInput, StyleSheet, Dimensions} from 'react-native';
 import debounce from 'lodash.debounce';
 
+import {CardList, Spinner} from '../components';
+
 import api from '../api';
-import Spinner from '../components/Spinner';
-import CardList from '../components/CardList';
 
 const searchCards = async (searchTerm, setIsFetching) => {
   setIsFetching(true);

@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, StyleSheet, View} from 'react-native';
+
+import {Spinner} from '../components';
+
 import api from '../api';
-import Spinner from '../components/Spinner';
 
 const Mechanics = ({navigation}) => {
   const [isFetching, setIsFetching] = useState(false);
