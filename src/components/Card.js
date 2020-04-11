@@ -63,6 +63,7 @@ class Card extends Component {
       toValue: this.value >= 90 ? 0 : 180,
       friction: 8,
       tension: 10,
+      useNativeDriver: true,
     }).start();
   }
 
