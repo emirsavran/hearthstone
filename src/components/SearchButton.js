@@ -1,14 +1,14 @@
 import React from 'react';
-import {TouchableOpacity, Image, StyleSheet} from 'react-native';
+import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+
 import search from '../assets/search.png';
 
-const SearchButton = ({navigation}) => {
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-      <Image source={search} style={styles.imageStyle} />
-    </TouchableOpacity>
-  );
-};
+const SearchButton = ({ navigation }) => (
+  <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+    <Image source={search} style={styles.imageStyle} />
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
   imageStyle: {
@@ -18,5 +18,11 @@ const styles = StyleSheet.create({
     tintColor: '#333333',
   },
 });
+
+SearchButton.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default SearchButton;

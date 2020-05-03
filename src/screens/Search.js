@@ -1,8 +1,11 @@
-import React, {useState, useCallback} from 'react';
-import {Text, TextInput, StyleSheet, Dimensions} from 'react-native';
+import React, { useState, useCallback } from 'react';
+import {
+  Text, TextInput, StyleSheet, Dimensions,
+} from 'react-native';
 import debounce from 'lodash.debounce';
+import PropTypes from 'prop-types';
 
-import {CardList, Spinner} from '../components';
+import { CardList, Spinner } from '../components';
 
 import api from '../api';
 
@@ -16,18 +19,17 @@ const searchCards = async (searchTerm, setIsFetching, setError, setCards) => {
     return setError(result.error);
   }
 
-  setCards(result.json);
-  console.log(result);
+  return setCards(result.json);
 };
 
-const Search = ({navigation}) => {
+const Search = ({ navigation }) => {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
   const [cards, setCards] = useState([]);
   const [value, setValue] = useState('');
   const debouncedApiCall = useCallback(debounce(searchCards, 1000), []);
 
-  const onChangeText = searchTerm => {
+  const onChangeText = (searchTerm) => {
     setValue(searchTerm);
     if (!searchTerm) {
       return;
@@ -68,5 +70,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#dddddd',
   },
 });
+
+Search.propTypes = {
+  navigation: PropTypes.shape({
+    setOptions: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default Search;

@@ -1,12 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-  Animated,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  Image,
-  Text,
-  View,
+  Animated, TouchableWithoutFeedback, StyleSheet, Image, Text, View,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import placeholder from '../assets/placeholder.png';
 
@@ -17,7 +13,7 @@ class Card extends Component {
     // if not, set it to placeholder
     let imgSrc;
     if (props.item.img) {
-      imgSrc = {uri: props.item.img};
+      imgSrc = { uri: props.item.img };
     } else {
       imgSrc = placeholder;
     }
@@ -49,7 +45,7 @@ class Card extends Component {
   }
 
   componentDidMount() {
-    this.animatedValue.addListener(({value}) => {
+    this.animatedValue.addListener(({ value }) => {
       this.value = value;
     });
   }
@@ -69,14 +65,14 @@ class Card extends Component {
 
   render() {
     const frontAnimatedStyle = {
-      transform: [{rotateY: this.frontInterpolate}],
+      transform: [{ rotateY: this.frontInterpolate }],
     };
     const backAnimatedStyle = {
-      transform: [{rotateY: this.backInterpolate}],
+      transform: [{ rotateY: this.backInterpolate }],
     };
 
-    const {item} = this.props;
-    const {imgSrc} = this.state;
+    const { item } = this.props;
+    const { imgSrc } = this.state;
 
     return (
       <>
@@ -84,14 +80,15 @@ class Card extends Component {
           style={[
             styles.flipCard,
             frontAnimatedStyle,
-            {opacity: this.frontOpacity},
-          ]}>
+            { opacity: this.frontOpacity },
+          ]}
+        >
           <TouchableWithoutFeedback onPress={this.flipCard}>
             <Image
               resizeMode="contain"
               source={imgSrc}
               loadingIndicatorSource={placeholder}
-              onError={() => this.setState({imgSrc: placeholder})}
+              onError={() => this.setState({ imgSrc: placeholder })}
               style={styles.cardImage}
             />
           </TouchableWithoutFeedback>
@@ -101,15 +98,40 @@ class Card extends Component {
             styles.flipCard,
             styles.flipCardBack,
             backAnimatedStyle,
-            {opacity: this.backOpacity},
-          ]}>
+            { opacity: this.backOpacity },
+          ]}
+        >
           <TouchableWithoutFeedback onPress={this.flipCard}>
             <View style={styles.flipCardBackContainer}>
-              <Text>Card Set: {item.cardSet}</Text>
-              <Text>Player Class: {item.playerClass}</Text>
-              <Text>Type: {item.type}</Text>
-              {item.rarity && <Text>Rarity: {item.rarity}</Text>}
-              {item.race && <Text>Race: {item.race}</Text>}
+              <Text>
+                Card Set:
+                {' '}
+                {item.cardSet}
+              </Text>
+              <Text>
+                Player Class:
+                {' '}
+                {item.playerClass}
+              </Text>
+              <Text>
+                Type:
+                {' '}
+                {item.type}
+              </Text>
+              {item.rarity && (
+              <Text>
+                Rarity:
+                {' '}
+                {item.rarity}
+              </Text>
+              )}
+              {item.race && (
+              <Text>
+                Race:
+                {' '}
+                {item.race}
+              </Text>
+              )}
             </View>
           </TouchableWithoutFeedback>
         </Animated.View>
@@ -139,5 +161,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+Card.propTypes = {
+  item: PropTypes.shape({
+    cardSet: PropTypes.string,
+    playerClass: PropTypes.string,
+    type: PropTypes.string,
+    rarity: PropTypes.string,
+    race: PropTypes.string,
+    img: PropTypes.string,
+  }).isRequired,
+};
 
 export default Card;

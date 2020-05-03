@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, StyleSheet, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList, Text, TouchableOpacity, StyleSheet, View,
+} from 'react-native';
+import PropTypes from 'prop-types';
 
-import {Spinner} from '../components';
+import { Spinner } from '../components';
 
 import api from '../api';
 
-const Mechanics = ({navigation}) => {
+const Mechanics = ({ navigation }) => {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
   const [cardsByMech, setCardsByMech] = useState({});
@@ -20,14 +23,14 @@ const Mechanics = ({navigation}) => {
     }
 
     const cards = result.json;
-    console.log(cards);
     const mechanics = {};
-    Object.keys(cards).forEach(set => {
-      cards[set].forEach(card => {
+
+    Object.keys(cards).forEach((set) => {
+      cards[set].forEach((card) => {
         if (!card.mechanics) {
           return;
         }
-        card.mechanics.forEach(({name: mechanicName}) => {
+        card.mechanics.forEach(({ name: mechanicName }) => {
           if (!mechanics[mechanicName]) {
             mechanics[mechanicName] = [];
           }
@@ -35,15 +38,15 @@ const Mechanics = ({navigation}) => {
         });
       });
     });
-    setCardsByMech(mechanics);
-    console.log(mechanics);
+
+    return setCardsByMech(mechanics);
   };
 
   useEffect(() => {
     fetchAndFilterCards();
   }, []);
 
-  const handleMechPress = name => {
+  const handleMechPress = (name) => {
     navigation.navigate('Cards', {
       name,
       cards: cardsByMech[name],
@@ -62,11 +65,12 @@ const Mechanics = ({navigation}) => {
     <FlatList
       data={Object.keys(cardsByMech)}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
-      keyExtractor={item => item}
-      renderItem={({item}) => (
+      keyExtractor={(item) => item}
+      renderItem={({ item }) => (
         <TouchableOpacity
           onPress={() => handleMechPress(item)}
-          style={styles.button}>
+          style={styles.button}
+        >
           <Text style={styles.itemText}>{item}</Text>
           <Text style={styles.gt}>&#62;&#62;</Text>
         </TouchableOpacity>
@@ -94,5 +98,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+Mechanics.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default Mechanics;
